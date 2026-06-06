@@ -3,7 +3,7 @@
   <h1>🎙️ StudyVoice</h1>
   <p><strong>A zero-friction, voice-powered task & note manager built for students.</strong></p>
 
-  <a href="[ https://studyvoice.vercel.app/ ]">
+  <a href="https://studyvoice.vercel.app/">
     <img src="https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel" alt="Live Demo" />
   </a>
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
@@ -12,10 +12,12 @@
   <br />
   <br />
 
-  <video src="[ https://github.com/user-attachments/assets/c5623f3c-5349-4fa9-b974-02aeb93eebed ]" width="250" controls autoplay loop muted></video>
+</div>
 
+https://github.com/user-attachments/assets/c5623f3c-5349-4fa9-b974-02aeb93eebed
+
+<div align="center">
   <p><i>Watch the 30-second demo to see the Web Speech API in action!</i></p>
-
 </div>
 
 <br />
