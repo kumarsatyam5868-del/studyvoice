@@ -30,13 +30,16 @@ export default function App() {
 
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
-    recognition.interimResults = true;
+    
+    // BUG FIX 1: Disabled interim results to stop Android duplication loop
+    recognition.interimResults = false; 
 
     recognition.onresult = (event) => {
-      let currentTranscript = '';
-      for (let i = 0; i < event.results.length; i++) {
-        currentTranscript += event.results[i][0].transcript;
-      }
+      // BUG FIX 2: Extract text cleanly and add spaces between pauses
+      const currentTranscript = Array.from(event.results)
+        .map(result => result[0].transcript.trim())
+        .join(' ');
+        
       setTranscript(currentTranscript);
     };
 
@@ -52,7 +55,6 @@ export default function App() {
     setIsListening(true);
   };
 
-  // NEW: Save function now accepts a 'type' (task or note)
   const saveItem = (type) => {
     if (!transcript.trim()) return;
     
@@ -60,9 +62,9 @@ export default function App() {
     const newItem = {
       id: Date.now(),
       text: transcript,
-      type: type, // 'task' or 'note'
+      type: type,
       date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-      time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), // NEW: Gets the exact time
+      time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
       completed: false
     };
     
@@ -96,10 +98,9 @@ export default function App() {
       <div className="mt-10 w-full max-w-md bg-white p-6 rounded-xl shadow-sm border border-gray-200 min-h-[150px] flex flex-col">
         <p className="text-gray-500 text-sm mb-2 font-semibold uppercase tracking-wider">Live Transcript</p>
         <p className="text-gray-800 text-lg flex-grow">
-          {transcript || "Your words will appear here..."}
+          {transcript || "Speak clearly. Your words will appear when you pause..."}
         </p>
         
-        {/* NEW: Two buttons side-by-side instead of one */}
         {transcript && !isListening && (
           <div className="flex gap-3 mt-4">
             <button 
@@ -129,7 +130,6 @@ export default function App() {
               <div key={item.id} className={`p-4 rounded-xl shadow-sm border flex flex-col transition-all duration-300 ${item.completed ? 'bg-gray-100 border-gray-200' : 'bg-white border-gray-200'}`}>
                 
                 <div className="flex items-start gap-3">
-                  {/* NEW: Only show checkbox if it is a 'task' */}
                   {item.type === 'task' && (
                     <input 
                       type="checkbox" 
@@ -140,7 +140,6 @@ export default function App() {
                   )}
                   
                   <div className="flex-grow">
-                    {/* NEW: Show Type (Badge), Date, and Exact Time */}
                     <span className="text-[11px] font-bold mb-1.5 flex items-center gap-2 uppercase tracking-wide">
                       <span className={`px-2 py-0.5 rounded text-white ${item.type === 'task' ? 'bg-blue-500' : 'bg-green-500'}`}>
                         {item.type}
